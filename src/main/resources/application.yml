@@ -1,0 +1,19 @@
+spring:
+  config:
+    import: "classpath:secrets.properties"
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: llama3
+  data:
+    mongodb:
+      database: telegram
+      auto-index-creation: true
+      uri: mongodb+srv://${mongo.username}:${mongo.password}@cluster0.pjqrzgy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+telegram:
+  bots:
+    myBot:
+      username: ${tg.username}
+      token: ${tg.token}
