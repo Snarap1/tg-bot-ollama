@@ -15,7 +15,7 @@ class ChatBotService(
   @Qualifier("ollamaChatModel")
   private val ollamaChatClient: OllamaChatModel,
   private val historyRepo: historyEntryRepository,
-  private val userInfoRepository: UserInfoRepository
+  private val userInfoService: UserInfoService
 ) {
 
   public fun call(userMessage: String, historyId: String): String {
@@ -23,7 +23,7 @@ class ChatBotService(
     val historyPrompt = StringBuilder(PROMPT_CONVERSATION_HISTORY_INSTRUCTIONS)
     currentHistory.forEach { entry -> historyPrompt.append(entry.toString()) }
 
-    val userInfo = userInfoRepository.findUserInfoByChatId(historyId)
+    val userInfo = userInfoService.findUserInfoByChatId(historyId)
     val userInfoPrompt = StringBuilder(PROMPT_USER_INFO).append(
       "programming language for learning: ${
         userInfo

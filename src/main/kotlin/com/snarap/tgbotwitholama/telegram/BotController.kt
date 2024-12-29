@@ -10,17 +10,16 @@ import com.pengrad.telegrambot.model.Chat
 import com.pengrad.telegrambot.model.Update
 import com.pengrad.telegrambot.model.User
 import com.pengrad.telegrambot.request.SendMessage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.snarap.tgbotwitholama.service.UserInfoService
 import org.springframework.stereotype.Component
 
 @BotController
 @Component
-class BotController (
+class BotController(
   private val telegramBot: TelegramBot,
-  private val botService: BotService
-): TelegramMvcController {
+  private val botService: BotService,
+  private val userInfoService: UserInfoService
+) : TelegramMvcController {
 
   override fun getToken(): String {
     return telegramBot.token
@@ -29,14 +28,18 @@ class BotController (
   @BotRequest(value = ["/start"], type = [MessageType.MESSAGE])
   fun onStartCommand(user: User, chat: Chat): SendMessage {
     botService.sendStartMessage(chat)
-    botService.choseLanguage(user,chat)
-    botService.choseLevel(user, chat)
+    botService.choseLanguage(chat.id().toString())
     return SendMessage(chat.id(), "")
   }
 
   @MessageRequest("*")
-  fun onUserMessage(user: User, chat: Chat, message: String): SendMessage {
-    return botService.onUserMessage(user,chat, message)
+  fun onUserMessage(user: User, chat: Chat, message: String){
+    val chatId: String = chat.id().toString()
+    val userInfo = userInfoService.findUserInfoByChatId(chatId)
+    if (userInfo.languageLevel.isNullOrEmpty() || userInfo.languageForLearning.isNullOrEmpty())
+      botService.repeatSettingsMessage(chatId)
+    else
+      botService.onUserMessage(chatId, message)
   }
 
   @BotRequest(type = [MessageType.CALLBACK_QUERY])
