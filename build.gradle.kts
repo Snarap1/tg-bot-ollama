@@ -53,3 +53,14 @@ kotlin {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "com.snarap.TgBotWIthOlamaApplication.kt" // Замени на свой главный класс
+    }
+}
+
+
+tasks.bootJar {
+    archiveFileName.set("bot.jar") // Название выходного файла
+}

@@ -11,9 +11,9 @@ spring:
     mongodb:
       database: telegram
       auto-index-creation: true
-      uri: mongodb+srv://${mongo.username}:${mongo.password}@cluster0.pjqrzgy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      uri: ${MONGO_URI}
 telegram:
   bots:
     myBot:
-      username: ${tg.username}
-      token: ${tg.token}
+      username: ${TG_USERNAME}
+      token: ${TG_TOKEN}
