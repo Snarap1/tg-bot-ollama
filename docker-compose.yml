@@ -1,11 +1,13 @@
+version: "3"
+
 services:
   bot:
     build: .
     container_name: telegram_bot
     environment:
-      TG_USERNAME: "${TG_USERNAME}"
-      TG_TOKEN: "${TG_TOKEN}"
-      MONGO_URI: "mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@cluster0.pjqrzgy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+      - TG_USERNAME=${TG_USERNAME}
+      - TG_TOKEN=${TG_TOKEN}
+      - MONGO_URI=mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@cluster0.pjqrzgy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
     ports:
-      - "8080:8080"  # Прокси порта 8080 (контейнер) на 8080 (хост)
+      - "8080:8080"
     restart: always
