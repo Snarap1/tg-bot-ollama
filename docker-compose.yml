@@ -1,0 +1,23 @@
+version: "3"
+services:
+  service1:
+    build:
+      context: ${SERVICE_1_SRC_DIR}
+      dockerfile: Dockerfile
+    expose:
+      - 3001
+    environment:
+      - OTHER_SERVICE=http://service2:3001
+      - VIRTUAL_HOST=${SERVICE_DOMAIN}
+      - LETSENCRYPT_HOST=${SERVICE_DOMAIN}
+      - VIRTUAL_PORT=3001
+      - PORT=3001
+      - SERVICE_URL=${PROTOCOL}://${SERVICE_DOMAIN}
+      - HOST=0.0.0.0
+    networks:
+      - reverse-proxy
+
+networks:
+  reverse-proxy:
+    external:
+      name: reverse-proxy
